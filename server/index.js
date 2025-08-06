@@ -1,17 +1,46 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const interviewRoutes = require("./routes/interview");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
-const app = express();
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/interview", interviewRoutes);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.post("/api/chat", async (req, res) => {
+  const { messages } = req.body;
+
+  const model = genAI.getGenerativeModel({
+    model: "models/gemini-1.5-pro",
+  });
+
+  try {
+    const chat = model.startChat({
+      history: messages
+        .filter((msg) => msg.role !== "system") // ✅ remove system messages
+        .map((msg) => ({
+          role: msg.role,
+          parts: [{ text: msg.content }],
+        })),
+    });
+
+    const result = await chat.sendMessage(
+      messages[messages.length - 1].content
+    );
+    const response = result.response;
+    const text = response.text();
+
+    res.json({ reply: text });
+  } catch (error) {
+    console.error("❌ Gemini API error:", error);
+    res.status(500).json({ error: "Failed to get AI response" });
+  }
+});
+
+app.listen(3001, () => {
+  console.log("✅ Server running on http://localhost:3001");
 });
