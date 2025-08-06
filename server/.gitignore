@@ -1,0 +1,41 @@
+# --- Global Node ---
+node_modules/
+.env
+.env.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+
+# --- Vite ---
+*.log
+*.cache
+*.temp
+.vite
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- VS Code ---
+.vscode/
+*.code-workspace
+
+# --- Logs ---
+logs
+*.log
+*.gz
+
+# --- Coverage ---
+coverage/
+*.lcov
+
+# --- Output folders ---
+client/node_modules/
+client/dist/
+server/node_modules/
+
+# --- Others ---
+*.tgz
+.idea/
