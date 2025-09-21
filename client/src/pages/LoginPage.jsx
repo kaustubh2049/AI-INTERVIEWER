@@ -1,16 +1,30 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { apiFetch } from "../utils/api";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Add login logic here
-    alert("Logged in as " + username);
-    // navigate("/");
+    try {
+      const { ok, data } = await apiFetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      });
+      if (ok) {
+        localStorage.setItem("token", data.token);
+        alert("Login successful");
+        navigate("/dashboard");
+      } else {
+        alert(data?.message || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error during login");
+    }
   };
 
   return (
