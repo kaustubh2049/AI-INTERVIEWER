@@ -13,6 +13,10 @@ import CTASection from "./components/CTASection";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import PricingPage from "./pages/PricingPage";
+import AboutPage from "./pages/AboutPage";
+import TechnicalRoundPage from "./pages/TechnicalRoundPage";
+import InterviewSetupPage from "./pages/InterviewSetupPage";
 
 function App() {
   const navigate = useNavigate();
@@ -61,6 +65,8 @@ function App() {
             </>
           }
         />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/verify-otp" element={<VerifyOtpPage />} />
@@ -69,6 +75,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/technical-round"
+          element={
+            <ProtectedRoute>
+              <TechnicalRoundPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/interview/setup"
+          element={
+            <ProtectedRoute>
+              <InterviewSetupPage />
             </ProtectedRoute>
           }
         />
